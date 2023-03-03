@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1xihsirz1fi0$rxd#4zc3^o!+9vs5vt)yto@&utdz()egy5#gz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'boto3',
+    'storages',
 ]
 
 INSTALLED_APPS += [
@@ -124,11 +127,24 @@ USE_I18N = True
 
 USE_TZ = True
 
+# AWS S3
+AWS_ACCESS_KEY_ID = 'AKIA4GOZC7MV67ZZHPX4'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_DEFAULT_ACL = 'public-read'
+AWS_REGION = 'us-east-1'
+AWS_STORAGE_BUCKET_NAME = 'jsbucket0120'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME, AWS_REGION)
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfile_root'
+STATICFILES_DIRS = [
+    BASE_DIR / STATIC_URL,
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
