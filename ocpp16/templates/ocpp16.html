@@ -1,0 +1,72 @@
+
+{% extends "base.html" %}
+
+{% block contents %}
+<div class="row mt-3 mx-3">
+  <div class="col-md-6 fw-bold"><h4>메세지로그정보</h4></div>
+  <div class="col-md-6 ">
+        <form method="get" action="/ocpp16/">{% csrf_token %}
+          <div class="input-group input-group-sm">
+            <input type="datetime-local" class="form-control" name="start_dttm" id="start_dttm">
+            <input type="datetime-local" class="form-control" name="end_dttm" id="end_dttm">
+            <input type="text" class="form-control" name="q" placeholder="" aria-describedby="button-addon2">
+            <button class="btn btn-primary" type="submit" id="button-addon2">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>
+<div class="row mt-2 mx-2">
+  <div class="col-12">
+    <table class="table table-light">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">충전기</th>
+          <th scope="col">커넥션아이디</th>
+          <th scope="col">메세지오리진</th>
+          <th scope="col">메세지이름</th>
+          <th scope="col">메세지본문</th>
+          <th scope="col">등록일시</th>
+        </tr>
+      </thead>
+      <tbody class="text-dark">
+        {% for msgloginfo in ocpp16List %}
+        <tr>
+          <th scope="row">{{ msgloginfo.id }}</th>
+          <th><a href="/charginginfo/{{ charginginfo.id }}">{{ msgloginfo.cpnumber }}</a></th>
+          <th>{{ msgloginfo.connection_id }}</th>
+          <th>{{ msgloginfo.msg_direction }}</th>
+          <th>{{ msgloginfo.msg_name }}</th>
+          <th>{{ msgloginfo.msg_content }}</th>
+          <th>{{ msgloginfo.register_dttm }}</th>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="pagination justify-content-center mt-5">
+      <ul class="step-links">
+        {% if page_obj.has_previous %}
+        <a class="btn btn-sm btn-outline-primary" href="?page=1">처음으로</a>
+        <a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">이전으로</a>
+        {% else %}
+        <a class="btn btn-sm btn-outline-primary disabled" href="#">처음으로</a>
+        <a class="btn btn-sm btn-outline-primary disabled" href="#">이전으로</a>
+        {% endif %}
+      <span class="current">
+        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+      </span>
+        {% if page_obj.has_next %}
+        <a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.next_page_number }}">다음으로</a>
+        <a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}">마지막으로</a>
+        {% else %}
+        <a class="btn btn-sm btn-outline-primary disabled" href="#">다음으로</a>
+        <a class="btn btn-sm btn-outline-primary disabled" href="#">마지막으로</a>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

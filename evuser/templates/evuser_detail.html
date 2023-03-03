@@ -1,0 +1,54 @@
+{% extends "base.html" %} 
+
+{% block head %}
+<link rel="stylesheet" href="../../../static/style.css" />
+{% endblock %}
+
+{% block contents %} 
+<div class="container mt-3 mx-3">
+  <h4>회원 상세정보</h4>
+  <div class="row mt-5">
+    <div class="col-12">
+      <div class="form-group mb-3">
+        
+        <label for="username" class="">사용자명</label>
+        <input type="text" class="form-control" id="username" value="{{ evuser.userid }}" readonly/>
+        <label for="name" class="">이름</label>
+        <textarea class="form-control" readonly>{{ evuser.name }}</textarea>
+        <label for="email" class="">이메일</label>
+        <input type="email" class="form-control" id="email" value="{{evuser.email}} "readonly/>
+        <label for="phone" class="">전화번호</label>
+        <input type="text" class ="form-control" id="phone" value="{{evuser.phone}}"readonly/>
+        <label for="category" class="">회원구분</label>
+        <input type="text" class="form-control" id="category" value="{{evuser.category}}" readonly/>
+        <label for="status" class="">회원상태</label>
+        <input type="text" class="form-control" id="status" value="{{evuser.status}}" readonly/>
+        <label for="level" class="">등급</label>
+        <input type="text" class="form-control" id="level" value="{{evuser.level}}"readonly>
+        <label for="postcode" class="">우편번호</label>
+        <input class="form-control" id="postcode" value="{{evuser.postcode}}" readonly/>
+        <label for="roadAddress" class="">도로명주소</label>
+        <input class="form-control" id="roadAddress" value="{{evuser.roadAddress}}" readonly/>
+        <label for="detailaddress" class="">상세주소</label>
+        <input class="form-control" id="detailaddress" value="{{evuser.detailaddress}}" readonly/>
+      </div>
+      <!-- <button class="btn btn-primary" onclick="location.href='/svchome/'">돌아가기</button> -->
+      <div class="d-grid gap-2 d-md-block">
+        <a class="btn btn-primary" href="{% url 'evuser:update' pk=evuser.id %}" role="button">회원정보수정</a>
+        <a class="btn btn-primary" href="{% url 'evuser:password' pk=evuser.id %}" role="button">비밀번호변경</a>
+        <button class="btn btn-primary" onclick="javascript:history.go(-1);">돌아가기</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% if password_reg == 'ok' %}
+    <script>
+        alert('비밀번호가 변경되었습니다.')
+        
+    </script>
+{% endif %}
+{% endblock %} 
+
+{% block script %}
+<script src="../../../static/script.js"></script>
+{% endblock %}

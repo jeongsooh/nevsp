@@ -1,0 +1,107 @@
+{% extends "base.html" %} 
+
+{% block contents %}
+<div class="row mt-3 mx-3">
+	<div class="col-md-6 fw-bold">
+		<h4>EVNEST</h4>
+	</div>
+</div>
+<div class="row mt-3 mx-3">
+	<div class="col-md-6 fw-bold">
+		<h5>EVNEST</h5>
+	</div>
+	<div class="col-md-3 d-grid justify-content-md-end">
+	</div>
+</div>
+<div class="row mt-2 mx-2">
+	<div class="col-12">
+		<table class="table table-bordered">
+		<thead class="thead-light">
+		<tr>
+			<th scope="col">
+				#
+			</th>
+			<th scope="col">
+				사용중인 충전기
+			</th>
+			<th scope="col">
+				총 충전기
+			</th>
+			<th scope="col">
+				누적 충전량
+			</th>
+			<th scope="col">
+				충전금액
+			</th>
+			<th scope="col">
+				가입자
+			</th>
+			<th scope="co1">
+				누적 가입자
+			</th>
+			<th scope="col">
+				진행중인 이벤트 현황
+			</th>
+			<th scope="col">
+				날짜
+			</th>
+			<th scope="col">
+				삭제
+			</th>
+		</tr>
+		</thead>
+		<tbody class="text-dark">
+		 {% for evmain in evmainList %}
+		<tr>
+			<th scope="row">
+				{{ evmain.id }}
+			</th>
+			<th>
+				{{ evmain.useCharger }}</a>
+			</th>
+			<th>
+				{{ evmain.totalCharger }}
+			</th>
+			<th>
+				{{ evmain.totalenergy }}
+			</th>
+			<th>
+				{{ evmain.totalamount }}
+			</th>
+			<th>
+				{{ evmain.regiCount }}
+			</th>
+			<th>
+				{{ evmain.regiTotal }}
+			</th>
+			<th>
+				{{ evmain.eventcurrent }}
+			</th>
+			<th>
+				{{ evmain.systemday | date:'Y-m-d' }}
+			</th>
+			<th>
+				<button class="btn btn-primary btn-sm btn-danger" onclick="window.open('/evmain/{{ evmain.id }}/delete','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">삭제</button>
+			</th>
+		</tr>
+		 {% endfor %}
+		</tbody>
+		</table>
+		<div class="pagination justify-content-center mt-5">
+			<ul class="step-links">
+				 {% if page_obj.has_previous %} <a class="btn btn-sm btn-outline-primary" href="?page=1">처음으로</a>
+				<a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">이전으로</a>
+				{% else %} <a class="btn btn-sm btn-outline-primary disabled" href="#">처음으로</a>
+				<a class="btn btn-sm btn-outline-primary disabled" href="#">이전으로</a>
+				{% endif %} <span class="current">
+				{{ page_obj.number }} / {{ page_obj.paginator.num_pages }} </span>
+				{% if page_obj.has_next %} <a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.next_page_number }}">다음으로</a>
+				<a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}">마지막으로</a>
+				{% else %} <a class="btn btn-sm btn-outline-primary disabled" href="#">다음으로</a>
+				<a class="btn btn-sm btn-outline-primary disabled" href="#">마지막으로</a>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %}

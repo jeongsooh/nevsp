@@ -1,0 +1,53 @@
+{% extends "userbase.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block contents %}
+<div class="row mt-3 mx-3">
+    <div class="col-md-6 fw-bold"><h4>{{ request.session.loginuser }} 님</h4></div>
+</div>
+<!-- <div style="padding-left: 12px; padding-top: 16px; padding-bottom: 16px;">
+    <div class=""><a href="/mypage/detail/">회원 정보</a></div>
+</div> -->
+<!-- <div style="padding-left: 12px; padding-top: 16px; padding-bottom: 16px;">
+    <div class=""><a href="http://nevsp.co.kr/20" target="_blank">충전 안내</a></div>
+</div>
+<div style="padding-left: 12px; padding-top: 16px; padding-bottom: 16px;">
+    <div class=""><a href="http://nevsp.co.kr/17" target="_blank">충전기 신청 안내</a></div>
+</div>
+<div style="padding-left: 12px; padding-top: 16px; padding-bottom: 16px;">
+    <div class=""><a href="http://nevsp.co.kr/23" target="_blank">자주 묻는 질문</a></div> -->
+</div>
+&nbsp;<a href="/mypage/detail/" class="btn btn-info btn-icon-split">
+    <span class="icon text-white-50">
+        <i class="fas fa-info-circle"></i>
+    </span>
+    <span class="text">회원 정보</span>
+</a>
+<br><br>
+&nbsp;<a href="http://nevsp.co.kr/20" class="btn btn-secondary btn-icon-split"  target="_blank">
+    <span class="icon text-white-50">
+        <i class="fas fa-arrow-right"></i>
+    </span>
+    <span class="text">충전 안내</span>
+</a>
+<br>
+<br>
+&nbsp;<a href="http://nevsp.co.kr/17" class="btn btn-secondary btn-icon-split"  target="_blank">
+    <span class="icon text-white-50">
+        <i class="fas fa-arrow-right"></i>
+    </span>
+    <span class="text">충전기 신청 안내</span>
+</a>
+<br>
+<br>
+&nbsp;<a href="http://nevsp.co.kr/23" class="btn btn-secondary btn-icon-split"  target="_blank">
+    <span class="icon text-white-50">
+        <i class="fas fa-arrow-right"></i>
+    </span>
+    <span class="text">자주 묻는 질문</span>
+</a>
+
+{% endblock %}

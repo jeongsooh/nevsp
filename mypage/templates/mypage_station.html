@@ -1,0 +1,148 @@
+{% extends "userbase.html" %}
+
+
+{% block head %}
+
+{% endblock %}
+
+{% block contents %}
+<div class="row mt-3 mx-3">
+    <div class="col-md-6 fw-bold"><h4>충전소</h4></div>
+</div>
+<div id="map" style="width:400px;height:400px;"></div>
+<div class="row mt-3 mx-3">
+    <div class="col-md-8 fw-bold"><h4>충전기정보</h4></div>
+      <div class="col-md-3">
+        <form method="get" action="/mypage/station/">{% csrf_token %}
+          <div class="input-group input-group-sm">
+            <select class="form-select form-select-sm" name="category" id="category">
+              <option selected="selected" value="all">전체</option>
+              <option value="cpname">충전기이름</option>
+              <option value="cpstatus">충전상태</option>
+              <option value="roadAddress">도로명주소</option>
+            </select>
+            <input type="text" class="form-control" name="q" placeholder="" aria-label="Recipient's userid" aria-describedby="button-addon2">
+            <button class="btn btn-primary" type="submit" id="button-addon2">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+  </div>
+  <div class="row mt-3 mx-3">
+    <div class="col-md-8 fw-bold"><h5>충전기정보</h5></div>
+    <div class="col-md-3 d-grid justify-content-md-end">
+    </div>
+  </div>
+  <div class="row mt-2 mx-2">
+    <div class="col-12">
+      <table class="table table-bordered">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">충전기이름</th>
+            <th scope="col">충전상태</th>
+            <th scope="col">주소</th>
+            <th scope="col">상세주소</th>
+            <th scope="col">검색</th>
+          </tr>
+        </thead>
+        <tbody class="text-dark">
+          {% for evcharger in evcharger %}
+          <tr>
+            <th>{{ evcharger.cpname }}</th>
+            <th>{{ evcharger.cpstatus }}</th>
+            <th>{{ evcharger.roadAddress }} </th>
+            <th>{{ evcharger.detailaddress }} {{ evcharger.extraaddress }}</th>
+            <th><input type="button" class="checkBtn btn-primary" id="checkBtn" name="checkBtn" value="검색"></th>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="pagination justify-content-center mt-5">
+        <ul class="step-links">
+          {% if page_obj.has_previous %}
+          <a class="btn btn-sm btn-outline-primary" href="?category={{category | default_if_none:''}}&q={{q | default_if_none:''}}&page=1">처음으로</a>
+          <a class="btn btn-sm btn-outline-primary" href="?category={{category | default_if_none:''}}&q={{q | default_if_none:''}}&page={{ page_obj.previous_page_number }}">이전으로</a>
+          {% else %}
+          <a class="btn btn-sm btn-outline-primary disabled" href="#">처음으로</a>
+          <a class="btn btn-sm btn-outline-primary disabled" href="#">이전으로</a>
+          {% endif %}
+        <span class="current">
+          {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+        </span>
+          {% if page_obj.has_next %}
+          <a class="btn btn-sm btn-outline-primary" href="?category={{category | default_if_none:''}}&q={{q | default_if_none:''}}&page={{ page_obj.next_page_number }}">다음으로</a>
+          <a class="btn btn-sm btn-outline-primary" href="?category={{category | default_if_none:''}}&q={{q | default_if_none:''}}&page={{ page_obj.paginator.num_pages }}">마지막으로</a>
+          {% else %}
+          <a class="btn btn-sm btn-outline-primary disabled" href="#">다음으로</a>
+          <a class="btn btn-sm btn-outline-primary disabled" href="#">마지막으로</a>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        mapOption = { 
+            center: new kakao.maps.LatLng(37.558542, 126.8218699), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+    // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption); 
+    var geocoder = new kakao.maps.services.Geocoder();
+    $(".checkBtn").click(function(){
+			var str = ""
+			var tdArr = new Array();	// 배열 선언
+			var checkBtn = $(this);
+			
+			// checkBtn.parent() : checkBtn의 부모는 <td>이다.
+			// checkBtn.parent().parent() : <td>의 부모이므로 <tr>이다.
+			var tr = checkBtn.parent().parent();
+			var td = tr.children();
+			
+			console.log("클릭한 Row의 모든 데이터 : "+tr.text());
+			
+			var cpname = td.eq(0).text();
+			var cpstatus = td.eq(1).text();
+			var roadaddress = td.eq(2).text();
+			var detailaddress = td.eq(3).text();
+			
+            geocoder.addressSearch(roadaddress,function(result,status){
+                
+                    // 정상적으로 검색이 완료됐으면 
+                    if (status === kakao.maps.services.Status.OK) {
+                      
+                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                    // 결과값으로 받은 위치를 마커로 표시합니다
+                    var marker = new kakao.maps.Marker({
+                        map: map,
+                        position: coords
+                    });
+                    
+                    // 인포윈도우로 장소에 대한 설명을 표시합니다
+                    var infowindow = new kakao.maps.InfoWindow({
+                        content: '<div style="width:150px;text-align:center;padding:6px 0;">'+ cpname +'</div>'
+                    });
+                    infowindow.open(map, marker);
+
+                    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                    map.setCenter(coords);
+                    } 
+                });   
+			// 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
+			td.each(function(i){	
+				tdArr.push(td.eq(i).text());
+			});
+			
+			
+			$("#ex2_Result1").html(" * 클릭한 Row의 모든 데이터 = " + tr.text());		
+			$("#ex2_Result2").html(str);	
+		});
+	
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "userbase.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block contents %}
+<div class="row mt-3 mx-3">
+    <div class="col-md-6 fw-bold"><h4>회원카드</h4></div>
+    
+    <div class="col-mb-6" >
+        <button class="btn btn-primary btn-sm" onclick="location.href='/mypage/cardregi/'">회원 카드 추가</button> 
+        <button class="btn btn-primary btn-sm" onclick="location.href='/mypage/cardmanual/'">회원 카드 직접 추가</button> 
+    </div>
+    {% for card in cardinfo %}
+        <div>
+            <br>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title" name="cardname">{{ card.cardname }} {% if card.cardtag != '' %} ({{ card.cardtag|slice:"12:16" }}) {% elif card.cardstatus == '처리중' %} 사용 불가 {% endif %}</h5>
+                  
+                  <button class="btn btn-primary btn-sm" style="margin: 0px 1px 0px 0px;" onclick="window.open('/mypage/{{ card.id }}/re','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">재등록</button>
+                    <button class="btn btn-secondary btn-sm" style="margin: 0px 1px 0px 0px;" onclick="window.open('/mypage/{{ card.id }}/edit','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">카드 이름 변경</button>
+                    <button class="btn btn-primary btn-sm btn-danger" onclick="window.open('/mypage/{{ card.id }}/delete','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">삭제</button>  
+                </div>
+              </div>
+            <!-- <button class="btn btn-primary btn-sm btn-danger" onclick="window.open('/cardinfo/{{ card.id }}/delete','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">button</button> -->
+        </div>
+    {% endfor %}
+</div>
+{% if card_msg == 'ok' %}
+
+<script>
+    alert('충전기에 카드를 태그해주세요');
+    location.href='/mypage/card/'
+</script>
+{% elif card_msg == 'authfail' %}
+<script>
+    alert('등록 실패 하였습니다');
+    location.href='/mypage/card/'
+
+</script>
+{% elif card_msg == 'manualok' %}
+<script>
+    alert('카드 직접 추가 성공하였습니다')
+    location.href='/mypage/card/'
+</script>
+
+{% endif %}
+
+{% endblock %}

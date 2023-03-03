@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+<!-- humanize 기능을 이용해서 django에서 제공하는 각종 필터들을 이용할 수 있음
+이와 관련된 문서 (https://docs.djangoproject.com/en/4.0/ref/templates/builtins/) -->
+
+{% block header %}
+{% endblock %} -->
+
+{% block contents %}
+<div class="row mt-3 mx-3">
+  <div class="col-md-8 fw-bold"><h4>Active 충전기정보</h4></div>
+</div>
+<div class="row mt-3 mx-3">
+  <div class="col-md-6 fw-bold"><h5>충전기정보</h5></div>
+  <div class="col-md-2" style="float:right">
+  <form method="get" action="/clients/">{% csrf_token %}
+    <div class="input-group input-group-sm">
+      <input type="text" class="form-control" name="q" placeholder="" aria-label="Recipient's userid" aria-describedby="button-addon2">
+      <button class="btn btn-primary" type="submit" id="button-addon2">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </form>
+</div>
+</div>
+<div class="row mt-2 mx-2">
+  <div class="col-12">
+    <table class="table table-light">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">충전기번호</th>
+          <th scope="col">채널상태</th>
+          <th scope="col">충전기상태</th>
+          <th scope="col">커넥션아이디</th>
+          <th scope="col">승인된카드태그</th>
+          <th scope="col">원격충전</th>
+          <th scope="col">원격충전정지</th>
+          <th scope="col">커넥터해제</th>
+          <th scope="col">캐쉬삭제</th>
+          <th scope="col">설정확인</th>
+          <th scope="col">설정변경</th>
+          <th scope="col">충전기삭제</th>
+          <th scope="col">충전기리셋</th>
+        </tr>
+      </thead>
+      <tbody class="text-dark">
+        {% for clients in clientsList %}
+        <tr>
+          <th scope="row">{{ clients.id }}</th>
+          <!-- <th><a id="clients-{{ clients.id }}" href="/clients/{{ clients.id }}">{{ clients.cpnumber }}</a></th> -->
+          <th>{{ clients.cpnumber }}</th>
+          <th>{{ clients.channel_status }}</th>
+          <th>{{ clients.cpstatus }}</th>
+          <th>{{ clients.connection_id }}</th>
+          <th>{{ clients.authorized_tag }}</th>
+          <th>
+            <button class="btn btn-primary btn-sm btn-info" onclick="window.open('/clients/{{ clients.id }}/remo_scs_cpf','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">원격충전</button></th>
+          <th>
+            <button class="btn btn-primary btn-sm btn-info" onclick="window.open('/clients/{{ clients.id }}/remo_stop_cs','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">원격충전정지</button></th>
+          <th>
+            <button class="btn btn-primary btn-sm btn-info" onclick="window.open('/clients/{{ clients.id }}/unlock_connector','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">커넥터해제</button></th>
+          <th>
+            <button class="btn btn-primary btn-sm btn-info" onclick="window.open('/clients/{{ clients.id }}/clearcache','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">캐쉬삭제</button></th>
+          <th>
+            <button class="btn btn-primary btn-sm btn-info" onclick="window.open('/clients/{{ clients.id }}/getconf','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">설정확인</button></th>
+          <th>
+            <button class="btn btn-primary btn-sm btn-info" onclick="window.open('/clients/{{ clients.id }}/setconf','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">설정변경</button></th>
+          <th>
+            <button class="btn btn-primary btn-sm btn-danger" onclick="window.open('/clients/{{ clients.id }}/delete','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">삭제</button></th>
+          <th>
+            <button class="btn btn-primary btn-sm btn-danger" onclick="window.open('/clients/{{ clients.id }}/reset','window_name','width=430,height=500,location=no,status=no,scrollbars=no');">리셋</button></th>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="pagination justify-content-center mt-5">
+      <ul class="step-links">
+        {% if page_obj.has_previous %}
+        <a class="btn btn-sm btn-outline-primary" href="?page=1">처음으로</a>
+        <a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">이전으로</a>
+        {% else %}
+        <a class="btn btn-sm btn-outline-primary disabled" href="#">처음으로</a>
+        <a class="btn btn-sm btn-outline-primary disabled" href="#">이전으로</a>
+        {% endif %}
+      <span class="current">
+        {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+      </span>
+        {% if page_obj.has_next %}
+        <a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.next_page_number }}">다음으로</a>
+        <a class="btn btn-sm btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}">마지막으로</a>
+        {% else %}
+        <a class="btn btn-sm btn-outline-primary disabled" href="#">다음으로</a>
+        <a class="btn btn-sm btn-outline-primary disabled" href="#">마지막으로</a>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

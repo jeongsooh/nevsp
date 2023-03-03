@@ -1,0 +1,72 @@
+{% extends "userbase.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block contents %}
+<div style="padding-left: 12px; padding-top: 16px; padding-bottom: 16px;">
+    <h4> <span style="background: #F9F7F6; border-left: 0.5em solid #212529; padding: 0.5em;">회원정보</span></h4>
+</div>
+<div class="col-md-6">
+    <label for="name">이름</label>
+        <input class="form-control" value="{{evuser.name}}" readonly>
+    <label for="email">이메일</label>
+        <input class="form-control" value="{{evuser.email}}" readonly>
+    <label for="phone">전화번호</label>
+        <input class="form-control" value="{{evuser.phone}}" readonly>
+    <label for="email">주소</label>
+        <input class="form-control" value="{{evuser.roadAddress}} {{evuser.detailaddress}} {{evuser.extraaddress}}" readonly>    
+        <br>
+    <div><button type="button" onclick="location.href='/mypage/{{ evuser.id }}/'" class="btn btn-primary" >회원정보 수정 </button>
+    </div>
+</div>
+<div style="padding-left: 12px; padding-top: 16px; padding-bottom: 16px;">
+    <form method="post">
+        {% csrf_token %}
+        <div class="col-mb-6">
+            <label for="password">비밀번호 변경</label>
+        </div>
+        <div class="col-md-6">
+        <label for="password">기존 비밀번호</label>
+        <input class="form-control" name="oldpassword" id="oldpassword" type="password">
+        <label for="password">신규 비밀번호</label>
+        <input class="form-control" name="password1" id="password1" type="password">
+        <label for="password">신규 비밀번호 확인</label>
+        <input class="form-control" name="password2" id="password2" type="password">
+        <br>
+        <div class=""><button type="submit" class="btn btn-primary"  >비밀번호 변경</button></div>
+    </div>
+    </form>
+    <div style="padding-left: 12px; padding-top: 16px; padding-bottom: 16px;"><a type="button" class="btn btn-danger" href="/mypage/delete/">회원 탈퇴</a></div>
+</div>
+
+{% if password_reg == 'ok' %}
+    <script>
+        alert('비밀번호가 변경되었습니다.')
+        history.go(-1);
+    </script>
+{% elif password_reg == 'failed1' %}
+    <script>
+        alert('기존 비밀번호와 일치하지않습니다.')
+        history.go(-1);
+    </script>
+{% elif password_reg == 'failed2' %}
+    <script>
+        alert('새 비밀번호가 기존 비밀번호와 일치합니다')
+        history.go(-1);
+    </script>
+{% elif password_reg == 'failed3' %}
+    <script>
+        alert('새 비밀번호가 일치하지 않습니다.')
+        history.go(-1);
+    </script>
+{% elif password_reg == 'failed4' %}
+    <script>
+        alert('비밀번호는 8자 이상입니다.')
+        history.go(-1);
+    </script>
+{% endif %}
+
+
+{% endblock %}
