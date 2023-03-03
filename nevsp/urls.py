@@ -16,7 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from evuser.views import index, EvuserRegisterView, logout
+from evuser.views import (
+    index, logout, id_check, ajax_find_id_view,
+    EvuserRegisterView, RecoveryIdView
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +29,16 @@ urlpatterns = [
     path('register/',EvuserRegisterView.as_view(),name='register'),
     path('evmain/',include('evmain.urls')),
     path('evcharger/',include('evcharger.urls')),
+    path('charginginfo/',include('charginginfo.urls')),
+    path('cardinfo/',include('cardinfo.urls')),
+    path('logout/',logout),
+    path('variables/',include('variables.urls')),
+    path('ocpp16/',include('ocpp16.urls')),
+    path('clients/',include('clients.urls')),
+    path('mypage/',include('mypage.urls')),
+    path('accounts/',include('django.contrib.auth.urls')),
+    path('id_check/',id_check,name='id_check'),
+    path('recovery/id/',RecoveryIdView.as_view(),name='recovery_id'),
+    path('recovery/id/find/',ajax_find_id_view,name='ajax_id'),
+    path('engineer/',include('engineer.urls')),
 ]
