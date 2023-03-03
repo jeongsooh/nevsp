@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'boto3',
+    'storages',
 ]
 
 INSTALLED_APPS += [
@@ -131,6 +134,15 @@ USE_I18N = True
 
 USE_TZ = True
 
+# AWS S3
+AWS_ACCESS_KEY_ID = 'AKIA4GOZC7MV67ZZHPX4'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_DEFAULT_ACL = 'public-read'
+AWS_REGION = 'us-east-1'
+AWS_STORAGE_BUCKET_NAME = 'jsbucket0120'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.%s.amazonaws.com' % (AWS_STORAGE_BUCKET_NAME, AWS_REGION)
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
