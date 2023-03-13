@@ -98,25 +98,29 @@ class EvuserRegisterView(FormView):
             postcode = form.data.get('postcode'),
             roadAddress = form.data.get('roadAddress'),
             jibunAddress = form.data.get('jibunAddress'),
+            # address = form.data.get('address'),
             detailaddress = form.data.get('detailaddress') ,
             extraaddress = form.data.get('extraaddress')
         )
+        print('new user information: ', form.data)
         evuser.save()
         
         return super().form_valid(form)
 
 
-
 class EvuserCreateView(FormView):
   form_class = RegisterForm
+#   template_name = 'register.html'
   template_name = 'evuser_register.html'
-  
   success_url = '/evuser'
+  
   def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         userid = self.request.session['user']
         context['loginuser'] = userid
+        print('loginuser is ', userid)
         return context
+
   def form_valid(self, form):
         evuser = Evuser(
             userid = form.data.get('userid'),
@@ -130,6 +134,7 @@ class EvuserCreateView(FormView):
             detailaddress = form.data.get('detailaddress') ,
             extraaddress = form.data.get('extraaddress')
         )
+        print('userid is ', form.data)
         evuser.save()
         return super().form_valid(form)
 
