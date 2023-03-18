@@ -28,6 +28,7 @@ class Ocpp16Consumer(WebsocketConsumer):
     def connect(self,subprotocols=['ocpp1.6']):
         try:
             requested_protocols = [item[1] for item in self.scope['headers'] if item[0] == b'sec-websocket-protocol']
+            print('test point =================', requested_protocols)
         except KeyError:
             print("Client hasn't requested any Subprotocol. Closing Connection")
 
@@ -38,8 +39,6 @@ class Ocpp16Consumer(WebsocketConsumer):
                 self.scope['subprotocols'],requested_protocols)
             self.disconnect()
         self.room_group_name='all_clients'
-
-        print('test point =================')
 
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
